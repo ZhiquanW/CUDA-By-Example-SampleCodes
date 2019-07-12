@@ -1,5 +1,5 @@
+#include "../book.h"
 #include <iostream>
-
 __global__ void add(int a, int b, int *c);
 
 int main(void) {
@@ -13,3 +13,4 @@ int main(void) {
   cudaFree(dev_c);
   return 0;
 }
+__global__ void add(int a, int b, int *c) { *c = a + b; }
