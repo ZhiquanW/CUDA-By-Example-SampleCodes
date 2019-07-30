@@ -45,12 +45,14 @@ int main(void) {
   pngmaster bitmap(DIM, DIM);
   unsigned char *dev_bitmap;
   HANDLE_ERROR(
-      cudaMalloc((void **)&dev_bitmap, bitmap.height * bitmap.width * 4));
+      cudaMalloc((void **)&dev_bitmap,
+                 sizeof(unsigned char) * bitmap.height * bitmap.width * 4));
   dim3 grid(DIM, DIM);
   kernel<<<grid, 1>>>(dev_bitmap);
-  HANDLE_ERROR(cudaMemcpy(bitmap.data, dev_bitmap,
-                          bitmap.height * bitmap.width * 4,
-                          cudaMemcpyDeviceToHost));
-  bitmap.output("123.png");
+  HANDLE_ERROR(
+      cudaMemcpy(bitmap.data, dev_bitmap,
+                 sizeof(unsigned char) * bitmap.height * bitmap.width * 4,
+                 cudaMemcpyDeviceToHost));
+  bitmap.output("1234.png");
   cudaFree(dev_bitmap);
 }

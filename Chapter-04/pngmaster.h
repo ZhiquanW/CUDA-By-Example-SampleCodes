@@ -13,17 +13,19 @@ using namespace std;
 
 class pngmaster {
 public:
-  unsigned int height;          //图片像素高度
-  unsigned int width;           //图片像素宽度
-  unsigned char *data;          //存储颜色信息指针
-  const unsigned int dimension; //颜色维度
+  unsigned int height;          // the height of image
+  unsigned int width;           // the width of image
+  unsigned char *data;          // the pointer to image data
+  unsigned int size;            // The number of bytes allocated for image data
+  const unsigned int dimension; // the demension of colors
 
 public:
   pngmaster(unsigned int _h, unsigned int _w) : dimension(4) {
     height = _h;
     width = _w;
-    data = new unsigned char[_h * _w * dimension];
-    memset(data, 0, _h * _w * dimension);
+    size = _h * _w * 4;
+    data = new unsigned char[size];
+    memset(data, 0, size);
   }
 
   void set_pixel(int _x, int _y, int _r, int _g, int _b, int _a = 255) {
@@ -33,7 +35,7 @@ public:
     data[(_y * width + _x) * 4 + 2] = (unsigned char)std::min(_b, 255);
     data[(_y * width + _x) * 4 + 3] = (unsigned char)std::min(_a, 255);
   }
-
+  unsigned int size_bytes() { return sizeof(unsigned char) * size; }
   void output(const char *_name) {
     FILE *fp = fopen(_name, "wb");
     svpng(fp, width, height, data, 1);
